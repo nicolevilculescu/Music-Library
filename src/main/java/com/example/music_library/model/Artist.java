@@ -14,11 +14,19 @@ import java.util.List;
 public class Artist {
     @FirebaseId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @JsonProperty("name")
     private String name;
 
     @JsonProperty("albums")
     private List<Album> albums;
+
+    public Artist() {
+    }
+
+    public Artist(String name, List<Album> albums) {
+        this.name = name;
+        this.albums = albums;
+    }
 }

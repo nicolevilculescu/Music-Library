@@ -12,11 +12,16 @@ import lombok.Setter;
 public class Song {
     @FirebaseId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @JsonProperty("title")
     private String title;
 
     @JsonProperty("length")
     private String length;
+
+    public Song(String title, String length) {
+        this.title = title;
+        this.length = length;
+    }
 }

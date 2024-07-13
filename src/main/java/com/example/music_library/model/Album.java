@@ -14,7 +14,7 @@ import java.util.List;
 public class Album {
     @FirebaseId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @JsonProperty("title")
     private String title;
@@ -24,4 +24,10 @@ public class Album {
 
     @JsonProperty("description")
     private String description;
+
+    public Album(String title, List<Song> songs, String description) {
+        this.title = title;
+        this.songs = songs;
+        this.description = description;
+    }
 }
