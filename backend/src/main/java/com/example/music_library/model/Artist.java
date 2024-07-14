@@ -25,6 +25,12 @@ public class Artist {
     public Artist() {
     }
 
+    public Artist(String id, String name, List<Album> albums) {
+        this.id = id;
+        this.name = name;
+        this.albums = albums;
+    }
+
     public Artist(String name, List<Album> albums) {
         this.name = name;
         this.albums = albums;

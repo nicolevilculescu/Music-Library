@@ -25,6 +25,16 @@ public class Album {
     @JsonProperty("description")
     private String description;
 
+    public Album() {
+    }
+
+    public Album(String id, String title, List<Song> songs, String description) {
+        this.id = id;
+        this.title = title;
+        this.songs = songs;
+        this.description = description;
+    }
+
     public Album(String title, List<Song> songs, String description) {
         this.title = title;
         this.songs = songs;

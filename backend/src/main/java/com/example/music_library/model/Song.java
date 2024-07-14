@@ -20,6 +20,12 @@ public class Song {
     @JsonProperty("length")
     private String length;
 
+    public Song(String id, String title, String length) {
+        this.id = id;
+        this.title = title;
+        this.length = length;
+    }
+
     public Song(String title, String length) {
         this.title = title;
         this.length = length;
