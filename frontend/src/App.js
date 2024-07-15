@@ -7,7 +7,6 @@ function App() {
     const [, setSelectedAlbum] = useState(null);
 
     const handleSelect = (item) => {
-        // Determine the type of selected item and update state accordingly
         if (item.type === 'artist') {
             setSelectedArtist(item.id);
             setSelectedAlbum(null); // Reset selected album
@@ -18,9 +17,8 @@ function App() {
 
     return (
         <div>
-            <Autocomplete onSelect={handleSelect} />
+            {/* <Autocomplete onSelect={handleSelect} /> */}
             <ArtistList onArtistSelect={setSelectedArtist} onAlbumSelect={setSelectedAlbum} />
-            {/* Render other components as needed */}
         </div>
     );
 }

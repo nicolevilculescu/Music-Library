@@ -23,7 +23,7 @@ function AlbumDetails({ artistId, albumId }) {
     if (!album) return null;
 
     return (
-        <Box sx={{ pl: 4, ml: 2 }}> {/* Adjusted margin to move the album details to the right */}
+        <Box sx={{ pl: 4, ml: 2 }}>
       <p>{album.description}</p>
       <List component="div" disablePadding>
         {album.songs.map(song => (
