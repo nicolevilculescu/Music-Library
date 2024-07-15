@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AlbumDetails from './AlbumDetails';
 
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+
 function AlbumList({ artistId, onAlbumSelect }) {
     const [albums, setAlbums] = useState([]);
     const [selectedAlbum, setSelectedAlbum] = useState(null);
@@ -28,20 +34,37 @@ function AlbumList({ artistId, onAlbumSelect }) {
     };
 
     return (
-        <div>
-            <ul>
-                {albums.map(album => (
-                    <li key={album.id}>
-                        <span onClick={(event) => handleAlbumClick(album.id, event)}>
-                            {album.title}
-                        </span>
-                        {selectedAlbum === album.id && (
-                            <AlbumDetails artistId={artistId} albumId={album.id} />
-                        )}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <List component="div" disablePadding sx={{ borderRadius: '12px', backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      {albums.map(album => (
+        <React.Fragment key={album.id}>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={(event) => handleAlbumClick(album.id, event)}
+              sx={{
+                backgroundColor: 'transparent',
+                borderRadius: '12px',
+                transition: 'background-color 0.3s ease',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                },
+                ...(selectedAlbum === album.id && {
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                })
+              }}
+            >
+              <ListItemText primary={album.title} />
+            </ListItemButton>
+          </ListItem>
+          {selectedAlbum === album.id && (
+            <Box sx={{ pl: 4, ml: 2 }}>
+              <List component="div" disablePadding sx={{ borderRadius: '12px', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+                <AlbumDetails artistId={artistId} albumId={album.id} />
+              </List>
+            </Box>
+          )}
+        </React.Fragment>
+      ))}
+    </List>
     );
 }
 
