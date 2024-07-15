@@ -54,4 +54,4 @@ The frontend development server will start and open your default web browser to 
 - Explore the digital music library.
 
 ## Future developments
-- Autocomplete search for artist and album names
+- Autocomplete search for artist, album, and song names
