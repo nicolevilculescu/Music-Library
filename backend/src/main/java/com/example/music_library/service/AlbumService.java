@@ -77,13 +77,17 @@ public class AlbumService {
 
     public CompletableFuture<List<Album>> searchAlbums(String query) {
         CompletableFuture<List<Album>> future = new CompletableFuture<>();
-        Query queryRef = databaseReference.orderByChild("title").startAt(query).endAt(query + "\uf8ff");
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query albumQuery = databaseReference.orderByChild("albums/title")
+                .startAt(query)
+                .endAt(query + "\uf8ff");
+        albumQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Album> albumList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    albumList.add(snapshot.getValue(Album.class));
+                    for (DataSnapshot albumSnapshot : snapshot.child("albums").getChildren()) {
+                        albumList.add(albumSnapshot.getValue(Album.class));
+                    }
                 }
                 future.complete(albumList);
             }

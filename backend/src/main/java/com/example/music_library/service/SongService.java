@@ -2,14 +2,15 @@ package com.example.music_library.service;
 
 import com.example.music_library.model.Song;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class SongService {
@@ -42,7 +43,30 @@ public class SongService {
         return databaseReference.child(artistId).child("albums").child(albumId).child("songs");
     }
 
-    public Query searchSongs(String query) {
-        return databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
+    public CompletableFuture<List<Song>> searchSongs(String query) {
+        CompletableFuture<List<Song>> future = new CompletableFuture<>();
+        Query songQuery = databaseReference.orderByChild("albums/songs/title")
+                .startAt(query)
+                .endAt(query + "\uf8ff");
+        songQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Song> songList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot albumSnapshot : snapshot.child("albums").getChildren()) {
+                        for (DataSnapshot songSnapshot : albumSnapshot.child("songs").getChildren()) {
+                            songList.add(songSnapshot.getValue(Song.class));
+                        }
+                    }
+                }
+                future.complete(songList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+        return future;
     }
 }

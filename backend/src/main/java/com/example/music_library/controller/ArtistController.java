@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 
 @RestController
@@ -58,23 +59,8 @@ public class ArtistController {
     }
 
     @GetMapping("/search")
-    public List<Artist> searchArtists(@RequestParam String query) {
-        List<Artist> artistList = new ArrayList<>();
-        artistService.searchArtists(query).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Artist artist = getArtistInfo(snapshot, dataSnapshot);
-                    artistList.add(artist);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors.
-            }
-        });
-        return artistList;
+    public CompletableFuture<List<Artist>> searchArtists(@RequestParam String query) {
+        return artistService.searchArtists(query);
     }
 
     @PostMapping

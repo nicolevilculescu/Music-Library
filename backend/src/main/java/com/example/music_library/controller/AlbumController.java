@@ -1,7 +1,6 @@
 package com.example.music_library.controller;
 
 import com.example.music_library.model.Album;
-import com.example.music_library.model.Artist;
 import com.example.music_library.model.Song;
 import com.example.music_library.service.AlbumService;
 import com.google.firebase.database.*;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 
 @RestController
 @RequestMapping("/api/artists/{artistId}/albums")

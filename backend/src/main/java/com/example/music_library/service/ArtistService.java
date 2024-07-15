@@ -7,8 +7,11 @@ import com.example.music_library.model.Artist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ArtistService {
@@ -41,7 +44,26 @@ public class ArtistService {
         return databaseReference;
     }
 
-    public Query searchArtists(String query) {
-        return databaseReference.orderByChild("name").startAt(query).endAt(query + "\uf8ff");
+    public CompletableFuture<List<Artist>> searchArtists(String query) {
+        CompletableFuture<List<Artist>> future = new CompletableFuture<>();
+        Query artistQuery = databaseReference.orderByChild("name")
+                .startAt(query)
+                .endAt(query + "\uf8ff");
+        artistQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Artist> artistList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    artistList.add(snapshot.getValue(Artist.class));
+                }
+                future.complete(artistList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+        return future;
     }
 }
